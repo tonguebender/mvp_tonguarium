@@ -1,5 +1,5 @@
 {
-  "name": "tongue-store",
+  "name": "tonguarium",
   "version": "0.0.0",
   "description": "REST API for tongues",
   "main": "index.js",
