@@ -8,10 +8,9 @@ function batchProcess(data) {
   } else {
     return Promise
       .all(data.splice(0, 100).map(item => {
-        if (!item.lemma) console.log('>>>>>>>>>>>', item);
         return dicts.putDefinitions(item.lemma, { [item.pos]: item.gloss });
       }))
-      .then(_ => {
+      .then(() => {
         return batchProcess(data);
       }, err => {
         console.log('batchProcess Error: ', err);
@@ -27,7 +26,7 @@ processAll({ dataDir: './../wordnet-parser/dict' }).then(data => {
     .all(data.map(posData => {
       return batchProcess(posData);
     }))
-    .then(_ => {
+    .then(() => {
       console.log('ok');
     }, err => {
       console.log(err);
