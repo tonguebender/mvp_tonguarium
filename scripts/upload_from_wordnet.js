@@ -21,6 +21,7 @@ function batchProcess(data) {
 
 processAll({ dataDir: './../wordnet-parser/dict' }).then(data => {
   console.log('Start uploading');
+  throw new Error(`i'm broken, please fix API first`);
 
   return Promise
     .all(data.map(posData => {
