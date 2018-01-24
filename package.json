@@ -11,6 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "mongoose": "^4.11.1",
-    "restify": "^5.0.0"
+    "restify": "^5.0.0",
+    "restify-cors-middleware": "^1.1.0"
   }
 }
