@@ -4,9 +4,9 @@
   "description": "REST API for tongues",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "start-dev": "nodemon index.js",
-    "test": "node lib/db.test.js"
+    "start": "env $(cat .env | tr \"\\n\" \" \") node index.js",
+    "start-dev": "env $(cat .env | tr \"\\n\" \" \") nodemon index.js",
+    "test": "env $(cat .env | tr \"\\n\" \" \") node lib/db.test.js"
   },
   "author": "Sergey Maximov",
   "license": "MIT",

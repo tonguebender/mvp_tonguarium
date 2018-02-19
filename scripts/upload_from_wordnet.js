@@ -1,37 +1,41 @@
-const dicts = require('../lib/dicts/dicts');
 const db = require('../lib/db');
-const {processAll} = require('./../../wordnet-parser');
+const tongues = require('../lib/tongues');
+const { processAll } = require('./../../wordnet-parser');
 
-function batchProcess(data) {
+function batchProcess(data, pos) {
   if (!data.length) {
     return Promise.resolve();
   } else {
+    console.log(data.length);
     return Promise
-      .all(data.splice(0, 100).map(item => {
-        return dicts.putDefinitions(item.lemma, { [item.pos]: item.gloss });
+      .all(data.splice(0, 1000).map(item => {
+        return tongues.createOrUpdate('en-gb-dict', item.lemma, { [item.pos]: item.gloss });
       }))
       .then(() => {
-        return batchProcess(data);
+        return batchProcess(data, pos);
       }, err => {
         console.log('batchProcess Error: ', err);
-        return batchProcess(data);
+        return batchProcess(data, pos);
       });
   }
 }
 
-processAll({ dataDir: './../wordnet-parser/dict' }).then(data => {
-  console.log('Start uploading');
-  throw new Error(`i'm broken, please fix API first`);
+db.getConnection()
+  .then(() => {
+    return processAll({ dataDir: process.env.WORDNET_DICT }).then(data => {
+      console.log('Start uploading');
 
-  return Promise
-    .all(data.map(posData => {
-      return batchProcess(posData);
-    }))
-    .then(() => {
-      console.log('ok');
-    }, err => {
-      console.log(err);
+      return data.reduce((p, posData) => {
+        return p.then(() => batchProcess(posData, posData[0].pos));
+      }, Promise.resolve([]))
+        .then(() => {
+          console.log('ok');
+          db.closeConnection();
+        }, err => {
+          console.log(err);
+          db.closeConnection();
+        });
+
     });
-
-});
+  });
 
