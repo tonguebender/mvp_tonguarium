@@ -45,6 +45,7 @@ ${defs.join('\n')}`
 
 async function run() {
   const connection = await db.getConnection();
+
   await createCourse({
     id: 'test',
     description: 'test desc',
@@ -52,7 +53,7 @@ async function run() {
     words: ['mother', 'was', 'washing', 'a', 'frame']
   });
 
-  connection.close(() => {console.log('closed');})
+  connection.close(() => {console.log('closed')})
 }
 
 
