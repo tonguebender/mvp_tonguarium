@@ -7,7 +7,7 @@ const IPA = 'en-ipa';
 
 async function main() {
   const connection = await db.getConnection();
-  const courseName = 'Quiz SAT words';
+  const courseName = 'SAT words';
 
   await db.models['course'].deleteOne({ id: courseName });
 
@@ -15,9 +15,8 @@ async function main() {
   const content = await getContent(sats);
 
   await courses.put(courseName, {
-    type: 'quiz',
-    description: 'Quiz from 1000 SAT words',
-    tags: ['quiz', 'SAT'],
+    description: '1000 SAT words',
+    tags: ['SAT'],
     content,
   });
 
@@ -34,20 +33,18 @@ async function getContent(sats) {
       let ipa = '';
       try {
         const ipaDoc = await tongues.get(IPA, word);
-        ipa = `/${ipaDoc.data.ipa}/`;
+        ipa = ` /${ipaDoc.data.ipa}/`;
       } catch (e) {
         console.log('> no ipa', word);
       }
 
       return {
-        text: `${sat.data.def}`,
+        text: `*${word}*${ipa} ${sat.data.def}\n${sat.data.examples.join('\n')}`,
         data: {
           duration: 30,
-          buttons: ['ipa', 'say', 'skip'],
           contextData: {
-            type: 'quiz',
-            answer: word,
-            ipa,
+            type: 'definition',
+            id: word,
           },
         },
       };

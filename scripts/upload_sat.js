@@ -11,8 +11,8 @@ function processDATA(rows) {
     const row = rows.shift();
 
     if (row && row.match(/^\d{1,4}./)) {
-      let id = row.match(/^\d{1,4}. (\S+) /)[1];
-      res.push({ id, examples: [] })
+      const [, id, def] = row.match(/^\d{1,4}. (\S+) (.*)/);
+      res.push({ id, def, examples: [] });
     } else {
       res[res.length - 1].examples.push(row);
     }
@@ -27,10 +27,10 @@ async function processSAT(rows) {
 
   for (let row of batch) {
     if (!row) continue;
-    let { id, examples } = row;
+    let { id, def, examples } = row;
 
     try {
-      await tongues.put(TONGUE, id, { examples });
+      await tongues.put(TONGUE, id, { def, examples });
     } catch (e) {
       console.log('Dupl:', id);
     }
@@ -50,7 +50,9 @@ async function run() {
   const data = processDATA(rows);
   await processSAT(data);
 
-  connection.close(() => {console.log('closed')})
+  connection.close(() => {
+    console.log('closed');
+  });
 }
 
 run();
