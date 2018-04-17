@@ -43,8 +43,8 @@ async function getContent(sats) {
         data: {
           duration: 30,
           contextData: {
-            type: 'definition',
-            id: word,
+            type: 'DEFINITION',
+            entity: word,
           },
         },
       };

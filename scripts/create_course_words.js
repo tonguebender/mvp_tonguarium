@@ -39,8 +39,8 @@ async function getContent(words) {
           duration: 30,
           buttons: ['image', 'audio', 'synonyms', 'translation', 'ipa', 'examples'],
           contextData: {
-            type: 'definition',
-            id: word,
+            type: 'DEFINITION',
+            entity: word,
           }
         }
       });
@@ -50,7 +50,8 @@ async function getContent(words) {
         data: {
           duration: 10,
           contextData: {
-            type: 'quiz',
+            type: 'QUIZ',
+            entity: word,
             answer: word,
           }
         }

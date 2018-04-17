@@ -31,23 +31,15 @@ async function getContent(sats) {
     sats.map(async sat => {
       const word = sat.id.toLowerCase();
 
-      let ipa = '';
-      try {
-        const ipaDoc = await tongues.get(IPA, word);
-        ipa = `/${ipaDoc.data.ipa}/`;
-      } catch (e) {
-        console.log('> no ipa', word);
-      }
-
       return {
         text: `${sat.data.def}`,
         data: {
-          duration: 30,
-          buttons: ['ipa', 'say', 'skip'],
+          duration: 10,
+          buttons: ['skip'],
           contextData: {
-            type: 'quiz',
+            type: 'QUIZ',
+            entity: word,
             answer: word,
-            ipa,
           },
         },
       };
